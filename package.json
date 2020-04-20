@@ -11,7 +11,7 @@
     "compile": "tsc",
     "devStart": "nodemon src/app.js",
     "devStart2": "nodemon src/authServer.js",
-    "start": "npm run clean && npm install -g typescript && node build/src/app.js",
+    "start": "npm run clean && npm install -g typescript && tsc && node build/src/app.js",
     "start:watch": "tsc-watch --onSuccess \"node ./build/src/app.js\" --onFailure \"echo Compilation failed! \""
   },
   "contributors": [
