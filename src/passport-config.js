@@ -12,7 +12,7 @@ function initialize(passport,getUserByUsername,getUserById){
     const authenticateUser = async (username, password, done) =>{
     
         const user = await getUserByUsername(username)
-    
+        console.log(user)
             if(user === undefined){
                 return done(null, false, {message:"Ei käyttäjää tällä käyttäjänimellä"});
             }
