@@ -10,15 +10,8 @@ var objection_1 = require("objection");
 var Errors_1 = require("./Errors");
 var jwt = require("./accounts")["jwt"]
 const methodOverride = require("method-override")
-var userquery = require("../constants")["tables"]["TODO_TABLE"]
-const db  = require('knex')({
-    client: 'sqlite3',
-    useNullAsDefault: true,
-    connection: {
-      filename: "./todos.db"
-    }
-  });
-  
+
+
   
 
 // Initialize knex the SQL query builder.
@@ -71,6 +64,4 @@ app.delete("/logout", (req,res)=> {
     req.logOut();
     res.redirect("/login")
 })
-
-
 
