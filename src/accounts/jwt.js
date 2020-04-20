@@ -59,7 +59,3 @@ exports.validateRefreshToken = function (token) {
     });
     return toReturn;
 };
-exports.test = async function (string){
-    console.log("toimii")
-  }
-  

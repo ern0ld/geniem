@@ -5,14 +5,15 @@ var passwordHandler = require("./accounts")["password"]
 var Password_1 = require("./models/Password");
 var User_1 = require("./models/User");
 
+    //Tallennetaan token/tunniste userdataan, joten se kulkee aina käyttäjän pyyntöjen mukana
+        //Ilmeisesti localstorage tai cookietkaan eivät ole hyviä vaihtoehtoja tietoturvamielessä
+        //Save the accesstToken to userdata so it is passed with user requests
 exports.tokenHandler = async function tokenHandler(req,res,next){
     try{  
    
          const username = req.user.username
          var accessToken = await jwt.issueToken(username,3600)
-        //Tallennetaan token/tunniste userdataan, joten se kulkee aina käyttäjän pyyntöjen mukana
-        //Ilmeisesti localstorage tai cookietkaan eivät ole hyviä vaihtoehtoja tietoturvamielessä
-        //Save the accesstToken to userdata so it is passed with user requests
+    
          req.user.accessToken = accessToken
          next();
    
@@ -23,10 +24,11 @@ exports.tokenHandler = async function tokenHandler(req,res,next){
      }
  
  }
-
-exports.checkAuthenticated = async function checkAuthenticated(req,res, next){
-   //tarkastetaan passportin isAuthenticated-metodilla onko käyttäjä autentikoitu, mikäli on, päästetään eteenpäin
+  //tarkastetaan passportin isAuthenticated-metodilla onko käyttäjä autentikoitu, mikäli on, päästetään eteenpäin
    //Muussa tapauksessa ohjataan takaisin login-sivulle
+   //Check if user is authenticated with passport's isAuthenticated method
+exports.checkAuthenticated = async function checkAuthenticated(req,res, next){
+ 
     if(req.isAuthenticated()){
       next();
     }
@@ -34,9 +36,11 @@ exports.checkAuthenticated = async function checkAuthenticated(req,res, next){
     res.redirect("/login")
     }
 }
-exports.checkNotAuthenticated = function checkNotAuthenticated(req,res, next){
-    //Mikäli käyttäjä on kirjaututunut, on turha näyttää register- tai login-sivuja, ohjataan kotisivulle
+
+ //Mikäli käyttäjä on kirjaututunut, on turha näyttää register- tai login-sivuja, ohjataan kotisivulle
     //If the user is logged in, no need to show register or login pages anymore
+exports.checkNotAuthenticated = function checkNotAuthenticated(req,res, next){
+   
     if(req.isAuthenticated()){
        return res.redirect("/")
     }
@@ -59,7 +63,7 @@ var status = jwt.validateToken(token)
         next();
     }
       
-    //Hakee hashin käyttäjän salasanalle tietokannasta password-tablesta
+    //Hakee hashin tietokannasta käyttäjänimen perusteella 
     //Gets hash for the user password from database
    exports.getHashed = async function getHashed(username){
         const check = await Password_1["default"].query().select("hash").where({
