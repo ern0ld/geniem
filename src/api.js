@@ -38,17 +38,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var User_1 = require("./models/User");
 var Todo_1 = require("./models/Todo");
+//Salasanatable
+//Password table
 var Password_1 = require("./models/Password");
 var Errors_1 = require("./Errors");
-//var checkAuth = require("./app")
 var passwordHandler = require("./accounts")["password"]
-//var passwordHandler = require("./accounts")["password"]
 const passport = require("passport")
 const flash = require("express-flash")
 const session = require("express-session")
 const initializePassport = require("./passport-config")
 const methodOverride = require("method-override")
+//Käyttäjien tunnistamisen apuvälineitä
+//User authorization functions
 const authHandler = require("./authHandler")
+//Alustetaan passport
+//Initialize passport
 initializePassport(passport, 
     username => authHandler.getUserInfo(username),
     id => authHandler.getUserId(username))
@@ -63,8 +67,12 @@ exports["default"] = (function (router) {
         resave: false,
         saveUninitialized: false}
     ))
+    //Asetetaan reititin käyttämään passportia
+    //Set router to use passport
     router.use(passport.initialize())
     router.use(passport.session())
+    //Tämän avulla ohitetaan käyttäjän uloskirjautumisessa oleva POST-käsky ja kutsutaan passportin logOut-metodia
+    //With this we override the POST-method when user logs out and invoke the logOut-method of passport
     router.use(methodOverride("_method"))
     var bodyParser = require("body-parser");
     router.use(bodyParser.json())
@@ -100,6 +108,7 @@ exports["default"] = (function (router) {
    // }); });
 
    //Haetaan käyttäjän todot käyttäjän id:n perusteella
+   //Get user todos based on user id
     router.get('/todos/:id',authHandler.checkAuthenticated, authHandler.tokenAuthentication, function (req, res) {
      
         return __awaiter(void 0, void 0, void 0, function () {
@@ -202,67 +211,6 @@ const result = await upDateTodo(req.user.id,req.body.todoId,req.user.name, req.b
    
 });
 
- /*router.get("/tokentest", authHandler.tokenAuthentication,(req,res) =>{
-        res.json(posts.filter(post => post.username === req.user))
-    })
-
-async function tokenHandler(req,res,next){
-   try{  
-  
-        const username = req.user.username
-        var accessToken = await jwt.issueToken(username,60)
-       
-        req.user.accessToken = accessToken
-        next();
-  
-    }
-    catch{
-
-        res.status(500).send("Virhe tokenin luomisessa, käyttäjänimi saattaa olla väärä");
-    }
-
-}
-
-async function checkAuthenticated(req,res, next){
-    if(req.isAuthenticated()){
-        
-        next()
-    }
-    else{
-    res.redirect("/login")
-    }
-}
-function checkNotAuthenticated(req,res, next){
-    if(req.isAuthenticated()){
-       return res.redirect("/")
-    }
-    next();
-}
-
-function authenticateToken(req,res, next){
-    const author = req.headers["authorization"]
-    const token = author && author.split(" ")[1];
-    console.log(token)
-    if(token === undefined){return res.sendStatus(401)}
-var status = jwt.validateToken(token)
-    if(!status){
-        return res.sendStatus(403);
-    }
-    
-        next();
-    }
-     async function getHashed(username){
-        const check = await Password_1["default"].query().select("hash").where({
-            username: username
-          })
-          if(check !== undefined){
-              return check[0].hash
-          }
-          return false;
-    }
-    
-    
-    */
 
     //Tarkastetaan onko rekisteröitävä käyttäjänimi jo käytössä
     //Check if new username is already taken
