@@ -1,0 +1,18 @@
+<h1>Kirjaudu</h1>
+<% if (messages.error) {%>
+<%= messages.error %>
+<%}%>
+<form action="/login" method="POST">
+    <div>
+    <label for="username">Käyttäjänimi</label>
+    <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+            <label for="password">Salasana</label>
+            <input type="text" id="password" name="password" required>
+            </div>
+            <button type="submit">Kirjaudu</button>
+        </form>
+
+
+        <a href="/register">Rekisteröidy</a>

@@ -1,0 +1,85 @@
+<h1>Hei <%= name %></h1>
+
+<div id="todoDiv" style="float:right; top: 0; width:50%"></div>
+
+<button onclick="getTodos()">Hae TODOT</button>
+
+</form>
+</br>
+</br>
+
+</br>
+
+
+
+<form action="addTodo" method="POST">
+    <div>
+                <label for="description">Uusi TODO</label>
+                <input type="text" id="description" name="description" required>
+           
+                <button type="submit">Lähetä</button>
+            </div>
+            </form>
+        </br> </br>
+            
+  <form action="/updateTodo" method="POST" onsubmit="return confirm('Haluatko varmasti päivittää tämän id:n?');">
+    <div>
+     <label for="description" style="font-size:larger;">Päivitä olemassa oleva TODO</label>
+    
+     <div>
+    </br>
+
+        <label for="todoId">Päivitettävän TODO:n id </label>
+       <input type="text" id="todoId" name="todoId" required></div>
+       <div>
+        <label for="updatedesc">Uusi kuvaus TODOLLE </label>
+<input type="text" id="updatedesc" name="updatedesc" required>
+</div>
+     <button type="submit">Päivitä TODO</button>
+     </div>
+      </form>
+
+    </br>
+    <div>
+<form action="/logout?_method=DELETE" method="POST">
+<button type="submit">Kirjaudu ulos</button>
+</form>
+</div>
+<script>
+
+
+async function getTodos(){
+ 
+    const data = {  method : "GET", headers : {'Content-type': 'application/json'}}
+    
+    const query = await fetch('/todos/:id',data)
+   const response = await query.json().then(response => {
+    document.querySelectorAll("li").forEach(el => el.parentNode.removeChild(el))    
+    const keys =  Object.keys(response)
+    for(key in keys){
+        let listItem = document.createElement("li")
+        listItem.innerHTML = "Tehtävän id: "+response[key].id + "  " + response[key].description
+        document.getElementById("todoDiv").appendChild(listItem)
+        console.log(response[key])
+
+    }
+   }).catch(error => alert("accessToken vanhentunut"));
+   
+  
+}
+async function addTodos(){
+  
+    const description= document.getElementById("description").value 
+    const bodyData = {"description" : description  }
+    const data = {
+       method : "POST",
+       headers: {"Content-Type": "application/json"},
+       body: JSON.stringify(bodyData)
+       }
+       const query = await fetch('/addTodo',data).then(response => response.status === 200 ? alert("Tiedot lisätty") : alert("Jokin meni pieleen, tunniste saattaa olla vanhentunut. Kirjaudu ulos ja takaisin sisään saadaksesi uuden tunnisteen")).catch(error => alert("accessToken vanhentunut"))
+}
+
+
+</script>
+
+
