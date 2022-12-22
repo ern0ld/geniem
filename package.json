@@ -35,7 +35,7 @@
     "express-promise-router": "^3.0.1",
     "express-session": "^1.17.1",
     "heroku": "^7.39.3",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "knex": "^0.14.6",
     "lodash": "^4.17.4",
     "method-override": "^3.0.0",
